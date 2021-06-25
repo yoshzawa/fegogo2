@@ -1,0 +1,67 @@
+buildscript {
+  repositories {
+      jcenter()      // Bintray's repository - a fast Maven Central mirror & more
+      mavenCentral()
+  }
+  dependencies {
+    // Spring Boot Gradle Plugin を使用
+    classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE'
+    // Google App Engine Gradle plugin を使用
+    classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.1'
+  }
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.4.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+  id 'com.google.cloud.tools.appengine' version '2.4.1'
+
+}
+
+apply plugin: 'com.google.cloud.tools.appengine'
+
+group = 'jp.ac.jc21.fegogo2'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+  jcenter()
+	mavenCentral()
+}
+
+dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  // App Engine API の最新版
+  implementation 'com.google.appengine:appengine-api-1.0-sdk:+'
+  // Thymeleaf
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  // Spring Web
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  // Test
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    // JUnit 4 のサポートを除外する
+    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+	useJUnitPlatform()
+}
+
+// Google App Engine タスクの設定
+appengine {
+
+  
+  // デプロイ時の設定
+  // GCLOUD_CONFIG を指定しておくと
+  // gcloud config で設定しているプロジェクト情報がセットされる
+  deploy {
+    // デプロイ先の Google Cloud Project ID
+    projectId = "fegogo2"
+    // デプロイによって反映される Web アプリのバージョン
+    // 指定しなければ新しく生成される
+    version = "1"
+  }
+}
